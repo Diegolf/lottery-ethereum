@@ -17,7 +17,6 @@ const deploy = async () => {
         .send({from: accounts[0]});
 
     console.log('Contrato enviado para: ', result.options.address);
-    // 0xB0e1bD295A4D1dbbd2C2732792AD64E48C4079Fd
 };
 
 deploy();
