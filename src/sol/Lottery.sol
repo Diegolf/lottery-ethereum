@@ -5,7 +5,6 @@ contract Lottery{
     address public manager;
     bool private open; // Diz se ainda é possível apostar
     uint public nParticipants; // Numero de participantes
-    uint public totalValue;
 
     struct Player{
         address key;
@@ -47,7 +46,6 @@ contract Lottery{
         
         players.push(Player(msg.sender, msg.value, lastEntry + msg.value / 0.01 ether ));
         nParticipants++;
-        totalValue = totalValue+msg.value;
     }
     
     function pickWinner() public isOpen hasPlayers ownerOnly{
