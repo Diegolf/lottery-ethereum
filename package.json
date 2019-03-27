@@ -3,20 +3,35 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "eject": "react-scripts eject"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "ganache-cli": "^6.1.8",
     "mocha": "^5.2.0",
-    "solc": "^0.5.5",
+    "react": "^16.8.5",
+    "react-dom": "^16.8.5",
+    "react-scripts": "2.1.8",
+    "solc": "^0.4.25",
     "truffle-hdwallet-provider": "^1.0.5",
-    "web3": "^1.0.0-beta.48"
+    "web3": "^1.0.0-beta.37"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
   },
   "directories": {
     "test": "test"
   },
   "devDependencies": {},
-  "description": ""
+  "description": "",
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }
