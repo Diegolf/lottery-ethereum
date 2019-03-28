@@ -6,10 +6,12 @@ import lottery from './lottery';
 
 class App extends Component {
   state = {
-    manager: '', 
+    manager: '',
+    playerAddress: '', 
     totalValue: '0',
     numberOfParticipants: 0,
-    value: ''
+    value: '',
+    message: ''
   };
   
   // Automáticamente chamando quando o compenente é exibido
@@ -17,7 +19,8 @@ class App extends Component {
     const manager = await lottery.methods.manager().call();
     const totalValue = await web3.eth.getBalance(lottery.options.address);
     const numberOfParticipants = await lottery.methods.nParticipants().call();
-    this.setState({manager, totalValue, numberOfParticipants});
+    const playerAddress = await web3.eth.getAccounts();
+    this.setState({manager, totalValue, numberOfParticipants, playerAddress: playerAddress[0]});
   }
 
   render() {
@@ -42,6 +45,15 @@ class App extends Component {
             </div>
             <button>Enter</button>
           </form>
+          {this.state.manager == this.state.playerAddress &&(
+            <div>
+              <hr />
+              <h3>Time to Pick a Winner?</h3>
+              <button onClick={this.onClick}>Pick a Winner!</button>
+            </div>
+          )}
+          <hr />
+          <h2>{this.state.message}</h2>
       </div>
     );
   }
@@ -49,20 +61,41 @@ class App extends Component {
   onSubmit = async (event) =>{
     event.preventDefault();
 
-    const accounts = await web3.eth.getAccounts();
-    let value = this.state.value;
+    const value = this.state.value;
+
+    this.setState({message: 'Esperando pela confirmação da transação...'})
 
     try{
       if(parseFloat(value) >= 0.01 && parseFloat(value) <= 1){
-        await lottery.methods.enter().send({from: accounts[0], value: web3.utils.toWei(value, 'ether')});
+        await lottery.methods.enter().send({from: this.state.playerAddress, value: web3.utils.toWei(value, 'ether')});
+        this.setState({message: 'Você entrou na loteria !'})
       }else{
         alert('Valor inválido');
+        this.setState({message: ''})
       }
     }catch(e){
       alert('Valor inválido ou operação cancelada pelo usuário');
+      this.setState({message: ''})
       console.log(e);
     }
     
+
+  }
+
+  onClick = async (event) => {
+    event.preventDefault();
+
+    this.setState({message: 'Esperando pela confirmação da transação...'})
+
+    try{
+        await lottery.methods.pickWinner().send({from: this.state.playerAddress});
+        this.setState({message: 'O vencedor foi selecionado !'})
+    }catch(e){
+      alert('Ocorreu um erro ou operação cancelada pelo usuário');
+      this.setState({message: ''})
+      console.log(e);
+    }
+
   }
 
 
